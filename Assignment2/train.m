@@ -1,7 +1,17 @@
 % This function trains a neural network language model.
-function [model] = train(epochs)
-% Inputs:
+
+function [model] = train(epochs, learning_rate, momentum, numhid1, numhid2, init_wt, batchsize, data)
+% Inputs: (Former % SET HYPERPARAMETERS HERE)
 %   epochs: Number of epochs to run.
+%   learning_rate - Learning rate; default = 0.1.
+%   momentum      - Momentum; default = 0.9.
+%   numhid1       - Dimensionality of embedding space; default = 50.
+%   numhid2       - Number of units in hidden layer; default = 200.
+%   init_wt       - Standard deviation of the normal distribution
+%                   which is sampled to get the initial weights; default = 0.01
+%   batchsize     - Mini-batch size. Default = 100
+%   data
+
 % Output:
 %   model: A struct containing the learned weights and biases and vocabulary.
 
@@ -14,14 +24,7 @@ else
   start_time = clock;
 end
 
-% SET HYPERPARAMETERS HERE.
-batchsize = 100;  % Mini-batch size.
-learning_rate = 0.1;  % Learning rate; default = 0.1.
-momentum = 0.9;  % Momentum; default = 0.9.
-numhid1 = 50;  % Dimensionality of embedding space; default = 50.
-numhid2 = 200;  % Number of units in hidden layer; default = 200.
-init_wt = 0.01;  % Standard deviation of the normal distribution
-                 % which is sampled to get the initial weights; default = 0.01
+
 
 % VARIABLES FOR TRACKING TRAINING PROGRESS.
 show_training_CE_after = 100;
@@ -29,7 +32,7 @@ show_validation_CE_after = 1000;
 
 % LOAD DATA.
 [train_input, train_target, valid_input, valid_target, ...
-  test_input, test_target, vocab] = load_data(batchsize);
+  test_input, test_target, vocab] = load_data(batchsize, data);
 [numwords, batchsize, numbatches] = size(train_input); 
 vocab_size = size(vocab, 2);
 
@@ -80,9 +83,9 @@ for epoch = 1:epochs
     count =  count + 1;
     this_chunk_CE = this_chunk_CE + (CE - this_chunk_CE) / count;
     trainset_CE = trainset_CE + (CE - trainset_CE) / m;
-    fprintf(1, '\rBatch %d Train CE %.3f', m, this_chunk_CE);
+    %fprintf(1, '\rBatch %d Train CE %.3f', m, this_chunk_CE);
     if mod(m, show_training_CE_after) == 0
-      fprintf(1, '\n');
+      %fprintf(1, '\n');
       count = 0;
       this_chunk_CE = 0;
     end
@@ -117,7 +120,7 @@ for epoch = 1:epochs
     % (d) hid_bias_gradient = back_propagated_deriv_1';
 
     % FILL IN CODE. Replace the line below by one of the options.
-    back_propagated_deriv_2 = zeros(numhid2, batchsize);
+    %back_propagated_deriv_2 = zeros(numhid2, batchsize);
     % Options
     % (a) 
     back_propagated_deriv_2 = embed_to_hid_weights * back_propagated_deriv_1;
