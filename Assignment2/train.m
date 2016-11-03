@@ -1,6 +1,7 @@
 % This function trains a neural network language model.
 
 function [model] = train(epochs, learning_rate, momentum, numhid1, numhid2, init_wt, batchsize, data)
+fprintf('\nEpochs: %d\nrate: %.3f\nmomentum: %.3f\nhidden1: %d\nhidden2: %d\ninit weight: %.3f\nbatch size: %d\ndata size: %d %d\n', epochs, learning_rate, momentum, numhid1, numhid2, init_wt, batchsize, size(data.trainData, 1), size(data.trainData, 2));
 % Inputs: (Former % SET HYPERPARAMETERS HERE)
 %   epochs: Number of epochs to run.
 %   learning_rate - Learning rate; default = 0.1.
@@ -23,8 +24,6 @@ else
   OctaveMode = 0;
   start_time = clock;
 end
-
-
 
 % VARIABLES FOR TRACKING TRAINING PROGRESS.
 show_training_CE_after = 100;
@@ -55,7 +54,7 @@ tiny = exp(-30);
 
 % TRAIN.
 for epoch = 1:epochs
-  fprintf(1, 'Epoch %d\n', epoch);
+  % fprintf(1, 'Epoch %d of %d\n', epoch, epochs);
   this_chunk_CE = 0;
   trainset_CE = 0;
   % LOOP OVER MINI-BATCHES.
@@ -182,7 +181,7 @@ for epoch = 1:epochs
       end
     end
   end
-  fprintf(1, '\rAverage Training CE %.3f\n', trainset_CE);
+  % fprintf(1, '\rAverage Training CE %.3f\n', trainset_CE);
 end
 fprintf(1, 'Finished Training.\n');
 if OctaveMode
